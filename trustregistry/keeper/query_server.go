@@ -2,9 +2,8 @@ package keeper
 
 import (
 	"context"
-	"errors"
-
 	"cosmossdk.io/collections"
+	"errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -22,9 +21,7 @@ type queryServer struct {
 	k Keeper
 }
 
-// GetTrustRegistry defines the handler for the Query/GetTrustRegistry RPC method.
 func (qs queryServer) GetTrustRegistry(ctx context.Context, req *trustregistry.QueryGetTrustRegistryRequest) (*trustregistry.QueryGetTrustRegistryResponse, error) {
-	// [MOD-TR-QRY-1-2] Get Trust Registry checks
 	if !isValidDID(req.Did) {
 		return nil, status.Error(codes.InvalidArgument, "invalid DID syntax")
 	}
@@ -41,17 +38,18 @@ func (qs queryServer) GetTrustRegistry(ctx context.Context, req *trustregistry.Q
 	var documents []trustregistry.GovernanceFrameworkDocument
 
 	// Fetch versions
-	if err := qs.k.GFVersion.Walk(ctx, nil, func(key string, gfv trustregistry.GovernanceFrameworkVersion) (bool, error) {
-		if !req.ActiveGfOnly || gfv.Version == tr.ActiveVersion {
+	err = qs.k.GFVersion.Walk(ctx, nil, func(key string, gfv trustregistry.GovernanceFrameworkVersion) (bool, error) {
+		if gfv.TrDid == req.Did && (!req.ActiveGfOnly || gfv.Version == tr.ActiveVersion) {
 			versions = append(versions, gfv)
 		}
 		return false, nil
-	}); err != nil {
+	})
+	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	// Fetch documents
-	if err := qs.k.GFDocument.Walk(ctx, nil, func(key string, gfd trustregistry.GovernanceFrameworkDocument) (bool, error) {
+	err = qs.k.GFDocument.Walk(ctx, nil, func(key string, gfd trustregistry.GovernanceFrameworkDocument) (bool, error) {
 		for _, v := range versions {
 			if gfd.GfvId == v.Id {
 				if req.PreferredLanguage == "" || gfd.Language == req.PreferredLanguage {
@@ -63,7 +61,8 @@ func (qs queryServer) GetTrustRegistry(ctx context.Context, req *trustregistry.Q
 			}
 		}
 		return false, nil
-	}); err != nil {
+	})
+	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
