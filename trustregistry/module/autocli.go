@@ -13,18 +13,19 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
 					RpcMethod: "GetTrustRegistry",
-					Use:       "get-trust-registry [did] [--active-gf-only] [--preferred-language]",
+					Use:       "get-trust-registry [did]",
 					Short:     "Get the trust registry information for a given DID",
+					Long:      "Get the trust registry information for a given DID, with options to filter by active governance framework and preferred language",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "did"},
 					},
 					FlagOptions: map[string]*autocliv1.FlagOptions{
-						"active-gf-only": {
+						"active_gf_only": {
 							Name:         "active-gf-only",
 							DefaultValue: "false",
 							Usage:        "If true, include only current governance framework data",
 						},
-						"preferred-language": {
+						"preferred_language": {
 							Name:         "preferred-language",
 							DefaultValue: "",
 							Usage:        "Preferred language for the returned documents",
