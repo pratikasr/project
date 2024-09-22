@@ -13,6 +13,11 @@ service Query {
   rpc GetTrustRegistry(QueryGetTrustRegistryRequest) returns (QueryGetTrustRegistryResponse) {
     option (google.api.http).get = "/trustregistry/v1/trust_registry/{did}";
   }
+
+  // Params returns the current module parameters.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/trustregistry/v1/params";
+  }
 }
 
 // QueryGetTrustRegistryRequest is the request type for the Query/GetTrustRegistry RPC method.
@@ -27,4 +32,12 @@ message QueryGetTrustRegistryResponse {
   TrustRegistry trust_registry = 1;
   repeated GovernanceFrameworkVersion versions = 2[(gogoproto.nullable) = false];
   repeated GovernanceFrameworkDocument documents = 3[(gogoproto.nullable) = false];
+}
+
+// QueryParamsRequest is the request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  Params params = 1 [(gogoproto.nullable) = false];
 }

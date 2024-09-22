@@ -2,6 +2,7 @@ package app
 
 import (
 	_ "embed"
+	trustregistrykeeper "github.com/pratikasr/trustregistry/keeper"
 	"io"
 	"os"
 	"path/filepath"
@@ -39,6 +40,7 @@ import (
 	_ "github.com/cosmos/cosmos-sdk/x/distribution"   // import for side-effects
 	_ "github.com/cosmos/cosmos-sdk/x/mint"           // import for side-effects
 	_ "github.com/cosmos/cosmos-sdk/x/staking"        // import for side-effects
+	_ "github.com/pratikasr/trustregistry/module"
 )
 
 // DefaultNodeHome default home directories for the application daemon
@@ -68,6 +70,7 @@ type MiniApp struct {
 	StakingKeeper         *stakingkeeper.Keeper
 	DistrKeeper           distrkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
+	TrustRegistryKeeper   trustregistrykeeper.Keeper
 
 	// simulation manager
 	sm *module.SimulationManager
@@ -127,6 +130,7 @@ func NewMiniApp(
 		&app.StakingKeeper,
 		&app.DistrKeeper,
 		&app.ConsensusParamsKeeper,
+		&app.TrustRegistryKeeper,
 	); err != nil {
 		return nil, err
 	}

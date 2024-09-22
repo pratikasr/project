@@ -1,0 +1,59 @@
+package module
+
+import (
+	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
+	trustregistryv1 "github.com/pratikasr/trustregistry/api/v1"
+)
+
+// AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
+func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
+	return &autocliv1.ModuleOptions{
+		Query: &autocliv1.ServiceCommandDescriptor{
+			Service: trustregistryv1.Query_ServiceDesc.ServiceName,
+			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
+				{
+					RpcMethod: "GetTrustRegistry",
+					Use:       "get-trust-registry [did] [--active-gf-only] [--preferred-language]",
+					Short:     "Get the trust registry information for a given DID",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "did"},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"active-gf-only": {
+							Name:         "active-gf-only",
+							DefaultValue: "false",
+							Usage:        "If true, include only current governance framework data",
+						},
+						"preferred-language": {
+							Name:         "preferred-language",
+							DefaultValue: "",
+							Usage:        "Preferred language for the returned documents",
+						},
+					},
+				},
+				{
+					RpcMethod: "Params",
+					Use:       "params",
+					Short:     "Get the current module parameters",
+				},
+			},
+		},
+		Tx: &autocliv1.ServiceCommandDescriptor{
+			Service: trustregistryv1.Msg_ServiceDesc.ServiceName,
+			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
+				{
+					RpcMethod: "CreateTrustRegistry",
+					Use:       "create-trust-registry [did] [aka] [language] [doc-url] [doc-hash]",
+					Short:     "Create a new trust registry",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "did"},
+						{ProtoField: "aka"},
+						{ProtoField: "language"},
+						{ProtoField: "doc_url"},
+						{ProtoField: "doc_hash"},
+					},
+				},
+			},
+		},
+	}
+}
