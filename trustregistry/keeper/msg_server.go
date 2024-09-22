@@ -9,6 +9,7 @@ import (
 	"github.com/pratikasr/trustregistry"
 	"net/url"
 	"regexp"
+	"time"
 )
 
 type msgServer struct {
@@ -37,7 +38,7 @@ func (ms msgServer) CreateTrustRegistry(goCtx context.Context, msg *trustregistr
 	}
 
 	// [MOD-TR-MSG-1-3] Create New Trust Registry execution
-	now := ctx.BlockTime().Format("200601021504") // Format to yyyyMMddHHmm
+	now := ctx.BlockTime()
 	tr, gfv, gfd, err := ms.createTrustRegistryEntries(ctx, msg, now)
 	if err != nil {
 		return nil, err
@@ -59,12 +60,20 @@ func (ms msgServer) validateCreateTrustRegistryParams(ctx sdk.Context, msg *trus
 		return errors.New("invalid DID syntax")
 	}
 
+	// Check if a trust registry with this DID already exists
+	_, err := ms.k.TrustRegistry.Get(ctx, msg.Did)
+	if err == nil {
+		return errors.New("trust registry with this DID already exists")
+	}
+
+	// Validate AKA URI if present
 	if msg.Aka != "" && !isValidURI(msg.Aka) {
 		return errors.New("invalid AKA URI")
 	}
 
-	if len(msg.Language) > 17 {
-		return errors.New("language tag must not exceed 17 characters (rfc1766)")
+	// Validate language tag (rfc1766)
+	if !isValidLanguageTag(msg.Language) {
+		return errors.New("invalid language tag (must conform to rfc1766)")
 	}
 
 	if !isValidURL(msg.DocUrl) {
@@ -78,84 +87,55 @@ func (ms msgServer) validateCreateTrustRegistryParams(ctx sdk.Context, msg *trus
 	return nil
 }
 
+func isValidLanguageTag(lang string) bool {
+	match, _ := regexp.MatchString(`^[a-zA-Z0-9]{1,8}(-[a-zA-Z0-9]{1,8})*$`, lang)
+	return match && len(lang) <= 17
+}
+
 func (ms msgServer) checkSufficientFees(ctx sdk.Context, creator string) error {
 	creatorAddr, err := sdk.AccAddressFromBech32(creator)
 	if err != nil {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Get the estimated transaction fees
-	estimatedFees, err := ms.getEstimatedTransactionFees(ctx)
-	if err != nil {
-		return fmt.Errorf("failed to estimate transaction fees: %w", err)
+	// Use the first denomination from minimum gas prices
+	minGasPrices := ctx.MinGasPrices()
+	if len(minGasPrices) == 0 {
+		return fmt.Errorf("no minimum gas price set")
 	}
+	feeDenom := minGasPrices[0].Denom
 
-	// Get the available balance (not blocked by trust deposit nor staked)
-	availableBalance, err := ms.getAvailableBalance(ctx, creatorAddr)
-	if err != nil {
-		return fmt.Errorf("failed to get available balance: %w", err)
-	}
+	// Estimate fee (using a fixed gas amount for simplicity)
+	estimatedGas := uint64(200000)
+	estimatedFee := minGasPrices.AmountOf(feeDenom).MulInt64(int64(estimatedGas))
 
-	// Check if the available balance covers the estimated fees
-	if availableBalance.IsLT(estimatedFees) {
-		return fmt.Errorf("insufficient available funds to cover estimated transaction fees")
+	// Check if the account has enough balance
+	balance := ms.k.bankKeeper.GetBalance(ctx, creatorAddr, feeDenom)
+	if balance.Amount.LT(estimatedFee.TruncateInt()) {
+		return fmt.Errorf("insufficient funds to cover estimated transaction fees")
 	}
 
 	return nil
 }
 
-func (ms msgServer) getEstimatedTransactionFees(ctx sdk.Context) (sdk.Coin, error) {
-	// Implement logic to estimate transaction fees
-	// This might involve querying the fee market module or using a predefined value
-	// For now, we'll use a placeholder value
-	return sdk.NewCoin("stake", sdk.NewInt(100)), nil
-}
-
-// Helper function to get available balance (not blocked by trust deposit nor staked)
-func (ms msgServer) getAvailableBalance(ctx sdk.Context, addr sdk.AccAddress) (sdk.Coin, error) {
-	// Get total balance
-	totalBalance := ms.k.bankKeeper.GetBalance(ctx, addr, "stake")
-
-	// Get blocked balance (trust deposit + staked amount)
-	blockedBalance, err := ms.getBlockedBalance(ctx, addr)
-	if err != nil {
-		return sdk.Coin{}, err
-	}
-
-	// Calculate available balance
-	availableBalance := totalBalance.Sub(blockedBalance)
-	if availableBalance.IsNegative() {
-		availableBalance = sdk.NewCoin("stake", sdk.ZeroInt())
-	}
-
-	return availableBalance, nil
-}
-
-// Helper function to get blocked balance (trust deposit + staked amount)
-func (ms msgServer) getBlockedBalance(ctx sdk.Context, addr sdk.AccAddress) (sdk.Coin, error) {
-	// Implement logic to get trust deposit and staked amount
-	// This might involve querying other modules (e.g., staking module)
-	// For now, we'll use a placeholder value
-	return sdk.NewCoin("stake", sdk.NewInt(50)), nil
-}
-
-func (ms msgServer) createTrustRegistryEntries(_ sdk.Context, msg *trustregistry.MsgCreateTrustRegistry, now string) (trustregistry.TrustRegistry, trustregistry.GovernanceFrameworkVersion, trustregistry.GovernanceFrameworkDocument, error) {
+func (ms msgServer) createTrustRegistryEntries(_ sdk.Context, msg *trustregistry.MsgCreateTrustRegistry, now time.Time) (trustregistry.TrustRegistry, trustregistry.GovernanceFrameworkVersion, trustregistry.GovernanceFrameworkDocument, error) {
 	tr := trustregistry.TrustRegistry{
 		Did:           msg.Did,
 		Controller:    msg.Creator,
 		Created:       now,
 		Modified:      now,
-		Deposit:       0, // Implement deposit logic if needed
+		Deposit:       0,
 		Aka:           msg.Aka,
 		ActiveVersion: 1,
 		Language:      msg.Language,
 	}
 
 	gfv := trustregistry.GovernanceFrameworkVersion{
-		Id:      uuid.New().String(),
-		TrDid:   msg.Did,
-		Created: now,
-		Version: 1,
+		Id:          uuid.New().String(),
+		TrDid:       msg.Did,
+		Created:     now,
+		Version:     1,
+		ActiveSince: now,
 	}
 
 	gfd := trustregistry.GovernanceFrameworkDocument{

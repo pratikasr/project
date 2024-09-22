@@ -12,6 +12,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.50.10
 	github.com/cosmos/gogoproto v1.7.0
 	github.com/golang/protobuf v1.5.4
+	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240318140521-94a12d6c2237
 	google.golang.org/grpc v1.64.1

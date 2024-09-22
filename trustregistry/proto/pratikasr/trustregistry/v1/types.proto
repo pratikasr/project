@@ -21,14 +21,15 @@ message TrustRegistry {
 message GovernanceFrameworkVersion {
   string id = 1;
   string tr_did = 2;
-  google.protobuf.Timestamp created = 3 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp created = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
   int32 version = 4;
+  google.protobuf.Timestamp active_since = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
 }
 
 message GovernanceFrameworkDocument {
   string id = 1;
   string gfv_id = 2;
-  google.protobuf.Timestamp created = 3 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp created = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
   string language = 4;
   string url = 5;
   string hash = 6;
