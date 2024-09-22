@@ -14,41 +14,47 @@ import (
 type Keeper struct {
 	cdc          codec.BinaryCodec
 	addressCodec address.Codec
+	authority    string
 
-	authority string
-
+	// state management
 	Schema        collections.Schema
 	Params        collections.Item[trustregistry.Params]
 	TrustRegistry collections.Map[string, trustregistry.TrustRegistry]
 	GFVersion     collections.Map[string, trustregistry.GovernanceFrameworkVersion]
 	GFDocument    collections.Map[string, trustregistry.GovernanceFrameworkDocument]
+
+	// module references
+	bankKeeper trustregistry.BankKeeper
 }
 
 // NewKeeper creates a new Keeper instance
-func NewKeeper(cdc codec.BinaryCodec, addressCodec address.Codec, storeService storetypes.KVStoreService, authority string) Keeper {
+func NewKeeper(
+	cdc codec.BinaryCodec,
+	addressCodec address.Codec,
+	storeService storetypes.KVStoreService,
+	authority string,
+	bankKeeper trustregistry.BankKeeper,
+) Keeper {
 	if _, err := addressCodec.StringToBytes(authority); err != nil {
 		panic(fmt.Errorf("invalid authority address: %w", err))
 	}
 
 	sb := collections.NewSchemaBuilder(storeService)
 	k := Keeper{
-		cdc:          cdc,
-		addressCodec: addressCodec,
-		authority:    authority,
-		Params:       collections.NewItem(sb, trustregistry.ParamsKey, "params", codec.CollValue[trustregistry.Params](cdc)),
-		TrustRegistry: collections.NewMap(sb, trustregistry.TrustRegistryKey, "trust_registry",
-			collections.StringKey, codec.CollValue[trustregistry.TrustRegistry](cdc)),
-		GFVersion: collections.NewMap(sb, trustregistry.GovernanceFrameworkVersionKey, "gf_version",
-			collections.StringKey, codec.CollValue[trustregistry.GovernanceFrameworkVersion](cdc)),
-		GFDocument: collections.NewMap(sb, trustregistry.GovernanceFrameworkDocumentKey, "gf_document",
-			collections.StringKey, codec.CollValue[trustregistry.GovernanceFrameworkDocument](cdc)),
+		cdc:           cdc,
+		addressCodec:  addressCodec,
+		authority:     authority,
+		Params:        collections.NewItem(sb, trustregistry.ParamsKey, "params", codec.CollValue[trustregistry.Params](cdc)),
+		TrustRegistry: collections.NewMap(sb, trustregistry.TrustRegistryKey, "trust_registry", collections.StringKey, codec.CollValue[trustregistry.TrustRegistry](cdc)),
+		GFVersion:     collections.NewMap(sb, trustregistry.GovernanceFrameworkVersionKey, "gf_version", collections.StringKey, codec.CollValue[trustregistry.GovernanceFrameworkVersion](cdc)),
+		GFDocument:    collections.NewMap(sb, trustregistry.GovernanceFrameworkDocumentKey, "gf_document", collections.StringKey, codec.CollValue[trustregistry.GovernanceFrameworkDocument](cdc)),
+		bankKeeper:    bankKeeper,
 	}
 
 	schema, err := sb.Build()
 	if err != nil {
 		panic(err)
 	}
-
 	k.Schema = schema
 
 	return k
