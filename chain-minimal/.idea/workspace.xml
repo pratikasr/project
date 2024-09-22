@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9668a131-1fc7-4c54-8dd8-bb38cd04459d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../trustregistry/codec.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../trustregistry/errors.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../trustregistry/genesis.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../trustregistry/keys.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../trustregistry/params.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trustregistry/keeper/genesis.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trustregistry/keeper/keeper.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trustregistry/keeper/msg_server.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trustregistry/keeper/query_server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../minimal-module-example" beforeDir="false" afterPath="$PROJECT_DIR$/../minimal-module-example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../trustregistry/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../trustregistry/go.mod" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
