@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9668a131-1fc7-4c54-8dd8-bb38cd04459d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../trustregistry/module/autocli.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../trustregistry/module/depinject.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../trustregistry/module/module.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../minimal-module-example" beforeDir="false" afterPath="$PROJECT_DIR$/../minimal-module-example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../trustregistry/keeper/query_server.go" beforeDir="false" afterPath="$PROJECT_DIR$/../trustregistry/keeper/query_server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../trustregistry/proto/pratikasr/trustregistry/v1/query.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../trustregistry/proto/pratikasr/trustregistry/v1/query.proto" afterDir="false" />
-    </list>
+    <list default="true" id="9668a131-1fc7-4c54-8dd8-bb38cd04459d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,21 +26,21 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "/Users/pratik/project/chain-minimal",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/pratik/project/chain-minimal&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
