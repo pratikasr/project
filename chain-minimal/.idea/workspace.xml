@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9668a131-1fc7-4c54-8dd8-bb38cd04459d" name="Changes" comment="" />
+    <list default="true" id="9668a131-1fc7-4c54-8dd8-bb38cd04459d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../trustregistry/codec.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trustregistry/errors.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trustregistry/genesis.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trustregistry/keys.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trustregistry/params.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../minimal-module-example" beforeDir="false" afterPath="$PROJECT_DIR$/../minimal-module-example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../trustregistry/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../trustregistry/go.mod" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,7 +20,7 @@
   </component>
   <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
