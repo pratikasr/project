@@ -4,6 +4,7 @@ package pratikasr.trustregistry.v1;
 option go_package = "github.com/pratikasr/trustregistry";
 
 import "google/api/annotations.proto";
+import "gogoproto/gogo.proto";
 import "pratikasr/trustregistry/v1/types.proto";
 
 // Query defines the gRPC querier service.
@@ -24,6 +25,6 @@ message QueryGetTrustRegistryRequest {
 // QueryGetTrustRegistryResponse is the response type for the Query/GetTrustRegistry RPC method.
 message QueryGetTrustRegistryResponse {
   TrustRegistry trust_registry = 1;
-  repeated GovernanceFrameworkVersion versions = 2;
-  repeated GovernanceFrameworkDocument documents = 3;
+  repeated GovernanceFrameworkVersion versions = 2[(gogoproto.nullable) = false];
+  repeated GovernanceFrameworkDocument documents = 3[(gogoproto.nullable) = false];
 }
