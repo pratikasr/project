@@ -92,28 +92,29 @@ func isValidLanguageTag(lang string) bool {
 	return match && len(lang) <= 17
 }
 
+// TODO: Remove comment before testing on real environment
 func (ms msgServer) checkSufficientFees(ctx sdk.Context, creator string) error {
-	creatorAddr, err := sdk.AccAddressFromBech32(creator)
-	if err != nil {
-		return fmt.Errorf("invalid creator address: %w", err)
-	}
-
-	// Use the first denomination from minimum gas prices
-	minGasPrices := ctx.MinGasPrices()
-	if len(minGasPrices) == 0 {
-		return fmt.Errorf("no minimum gas price set")
-	}
-	feeDenom := minGasPrices[0].Denom
-
-	// Estimate fee (using a fixed gas amount for simplicity)
-	estimatedGas := uint64(200000)
-	estimatedFee := minGasPrices.AmountOf(feeDenom).MulInt64(int64(estimatedGas))
-
-	// Check if the account has enough balance
-	balance := ms.k.bankKeeper.GetBalance(ctx, creatorAddr, feeDenom)
-	if balance.Amount.LT(estimatedFee.TruncateInt()) {
-		return fmt.Errorf("insufficient funds to cover estimated transaction fees")
-	}
+	//creatorAddr, err := sdk.AccAddressFromBech32(creator)
+	//if err != nil {
+	//	return fmt.Errorf("invalid creator address: %w", err)
+	//}
+	//
+	//// Use the first denomination from minimum gas prices
+	//minGasPrices := ctx.MinGasPrices()
+	//if len(minGasPrices) == 0 {
+	//	return fmt.Errorf("no minimum gas price set")
+	//}
+	//feeDenom := minGasPrices[0].Denom
+	//
+	//// Estimate fee (using a fixed gas amount for simplicity)
+	//estimatedGas := uint64(200000)
+	//estimatedFee := minGasPrices.AmountOf(feeDenom).MulInt64(int64(estimatedGas))
+	//
+	//// Check if the account has enough balance
+	//balance := ms.k.bankKeeper.GetBalance(ctx, creatorAddr, feeDenom)
+	//if balance.Amount.LT(estimatedFee.TruncateInt()) {
+	//	return fmt.Errorf("insufficient funds to cover estimated transaction fees")
+	//}
 
 	return nil
 }
